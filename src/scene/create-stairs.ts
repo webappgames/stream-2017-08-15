@@ -1,6 +1,6 @@
 import * as BABYLON from 'babylonjs';
 
-export default function createIceman(scene: BABYLON.Scene,level=3): BABYLON.Mesh {
+export default function createStairs(scene: BABYLON.Scene, level=10): BABYLON.Mesh {
 
     if(level<1){
         throw new Error(`level should be grater than 1`);
@@ -11,21 +11,23 @@ export default function createIceman(scene: BABYLON.Scene,level=3): BABYLON.Mesh
 
 
     const material = new BABYLON.StandardMaterial("icemanmaterail", scene);
-    material.diffuseColor = BABYLON.Color3.FromHexString('#dafffc');
+    material.diffuseColor = BABYLON.Color3.FromHexString('#777777');
 
 
-    let groundBallMesh = BABYLON.Mesh.CreateSphere("sphere1", 16, 1, scene);
+    let groundBallMesh = BABYLON.Mesh.CreateBox("stair", 1, scene);
     groundBallMesh.material = material;
+    groundBallMesh.scaling.z = 10;
+    groundBallMesh.checkCollisions = true;
     const groundMesh = groundBallMesh;
 
     for(let i=0;i<level-1;i++){
 
-        const radius = 1-((i+1)*0.2);
-        const groundBallMeshNew = BABYLON.Mesh.CreateSphere(`sphere${i+2}`, 16, radius, scene);
+        const groundBallMeshNew = BABYLON.Mesh.CreateBox(`stair${i+2}`, 1, scene);
         groundBallMeshNew.parent = groundBallMesh;
         groundBallMeshNew.material = material;
-        groundBallMeshNew.position.y = radius;
-
+        groundBallMeshNew.position.x = 1;
+        groundBallMeshNew.position.y = 0.5;
+        groundBallMeshNew.checkCollisions = true;
         groundBallMesh = groundBallMeshNew;
     }
 

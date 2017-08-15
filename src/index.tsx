@@ -4,10 +4,20 @@ import createScene from './scene/create-scene';
 import registerServiceWorker from './registerServiceWorker';
 registerServiceWorker();
 
-const canvas = document.getElementById("scene") as any;
+const canvasElement = document.getElementById("scene") as any;
+const scoreElement = document.getElementById("score") as HTMLDivElement;
+function updateScore(score:number){
+    //console.log(scoreElement);
+    scoreElement.innerText = score.toString();
+}
 
-const engine = new BABYLON.Engine(canvas, true);
-const scene = createScene(canvas, engine);
+canvasElement.onclick = function() {
+    canvasElement.requestPointerLock();
+    //document.requestFullscreen();
+}
+
+const engine = new BABYLON.Engine(canvasElement, true);
+const scene = createScene(canvasElement, engine, updateScore);
 
 engine.runRenderLoop(function () {
     scene.render();
