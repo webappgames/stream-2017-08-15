@@ -5,15 +5,28 @@ export default function createScene(canvas: HTMLCanvasElement, engine: BABYLON.E
     const scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color4(1,1,1,0);
 
-    const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI/2, Math.PI/2, 10, BABYLON.Vector3.Zero(), scene);
+    //const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI/2, Math.PI/2, 10, BABYLON.Vector3.Zero(), scene);
+    const camera = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 2, 0), scene);
+    //console.log(camera.speed );
+    camera.angularSensibility = 2000;
+    camera.speed  = 1;
     camera.attachControl(canvas, true);
+
+
+    scene.gravity = new BABYLON.Vector3(0, -0.9, 0);
+    scene.collisionsEnabled = true;
+    camera.checkCollisions = true;
+    camera.applyGravity = true;
+    camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+
+
 
     const light = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(-1, -2, -1), scene);
     light.position = new BABYLON.Vector3(20, 3, 20);
 
     const groundMesh = BABYLON.Mesh.CreateGround("ground", 10000, 10000, 2, scene);
     groundMesh.position.y = -0.5;
-
+    groundMesh.checkCollisions = true;
 
 
     let meshes:BABYLON.Mesh[]=[];
@@ -40,6 +53,7 @@ export default function createScene(canvas: HTMLCanvasElement, engine: BABYLON.E
         mesh.position.z = (Math.random()-0.5)*10;
         mesh.position.y = 0.0001;
         mesh.rotation.y = Math.random()*Math.PI*2;
+        mesh.checkCollisions = true;
 
         meshes.push(mesh);
     }
